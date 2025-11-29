@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { hashSHA256 } from "@/lib/meta-conversion"
 
-const META_PIXEL_ID = process.env.META_PIXEL_ID || "1068778628002287"
+const META_PIXEL_ID = process.env.META_PIXEL_ID || "24138350019134425"
 const META_API_TOKEN = process.env.META_CONVERSION_API_TOKEN
 const META_API_VERSION = "v18.0"
 
