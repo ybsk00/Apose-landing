@@ -78,7 +78,7 @@ export function GeminiChat() {
         },
         body: JSON.stringify({
           message: userMessage,
-          history: messages.map(m => ({
+          history: messages.slice(1).map(m => ({
             role: m.role === "user" ? "user" : "model",
             parts: [{ text: m.content }]
           }))
