@@ -372,7 +372,7 @@ export default function Home() {
             >
               <iframe
                 className="absolute inset-0 w-full h-full"
-                src="https://www.youtube.com/embed/fnJzdvUiqn4"
+                src="https://www.youtube.com/embed/Ywlrh6ALEBQ"
                 title="LLM 기반 이중퍼널 병원 마케팅 솔루션"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
