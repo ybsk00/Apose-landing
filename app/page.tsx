@@ -46,7 +46,7 @@ export default function Home() {
         {/* Background Image with Overlay */}
         <div className="absolute inset-0 z-0">
           <img
-            src="/images/hero-new.jpg"
+            src="/images/hero-bg-v2.jpg"
             alt="Futuristic Medical AI"
             className="w-full h-full object-cover"
           />
