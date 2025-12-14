@@ -12,28 +12,28 @@
   --bg-primary: #0a0f1a;
   --bg-secondary: #111827;
   --bg-tertiary: #1a2333;
-  
+
   /* 브랜드 색상 */
   --accent-blue: #3b82f6;
   --accent-cyan: #06b6d4;
   --accent-purple: #8b5cf6;
   --accent-gradient: linear-gradient(135deg, #3b82f6, #06b6d4);
-  
+
   /* 텍스트 색상 */
   --text-primary: #ffffff;
   --text-secondary: #94a3b8;
   --text-muted: #64748b;
-  
+
   /* 글래스모피즘 */
   --glass-bg: rgba(255, 255, 255, 0.05);
   --glass-bg-hover: rgba(255, 255, 255, 0.08);
   --glass-border: rgba(255, 255, 255, 0.1);
   --glass-border-hover: rgba(255, 255, 255, 0.2);
-  
+
   /* 그림자 */
   --shadow-glow: 0 0 60px rgba(59, 130, 246, 0.15);
   --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.4);
-  
+
   /* 기존 변수 유지 */
   --background: oklch(0.08 0.01 260);
   --foreground: oklch(0.98 0 0);
@@ -115,10 +115,12 @@
   * {
     @apply border-gray-700/50 outline-gray-500/50;
   }
+
   body {
     @apply bg-[var(--bg-primary)] text-white;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
+
   ::selection {
     @apply bg-blue-500/30 text-white;
   }
@@ -283,18 +285,39 @@
    ========================================= */
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-20px); }
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
 }
 
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
-  50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.6); }
+
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+  }
+
+  50% {
+    box-shadow: 0 0 40px rgba(59, 130, 246, 0.6);
+  }
 }
 
 @keyframes gradient-shift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 .animate-float {
@@ -311,6 +334,122 @@
 }
 
 /* =========================================
+   폰트 애니메이션 (글자 사라지지 않음)
+   ========================================= */
+
+/* 글로우 펄스 - 텍스트 그림자 반짝임 */
+@keyframes text-glow-pulse {
+
+  0%,
+  100% {
+    text-shadow:
+      0 0 10px rgba(6, 182, 212, 0.3),
+      0 0 20px rgba(6, 182, 212, 0.2),
+      0 0 30px rgba(6, 182, 212, 0.1);
+  }
+
+  50% {
+    text-shadow:
+      0 0 20px rgba(6, 182, 212, 0.6),
+      0 0 40px rgba(6, 182, 212, 0.4),
+      0 0 60px rgba(6, 182, 212, 0.2);
+  }
+}
+
+.text-glow-pulse {
+  animation: text-glow-pulse 3s ease-in-out infinite;
+}
+
+/* 그라디언트 시프트 - 배경 그라디언트가 흐름 */
+@keyframes gradient-text-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.text-gradient-animate {
+  background: linear-gradient(90deg,
+      #06b6d4,
+      #3b82f6,
+      #8b5cf6,
+      #3b82f6,
+      #06b6d4);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-text-shift 6s ease infinite;
+}
+
+/* 글로우 펄스 + 그라디언트 조합 */
+.text-hero-animate {
+  background: linear-gradient(90deg,
+      #06b6d4,
+      #3b82f6,
+      #8b5cf6,
+      #3b82f6,
+      #06b6d4);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-text-shift 6s ease infinite;
+  filter: drop-shadow(0 0 20px rgba(6, 182, 212, 0.3));
+}
+
+/* 웨이브 모션 - 글자가 살랑살랑 */
+@keyframes text-wave {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  25% {
+    transform: translateY(-3px);
+  }
+
+  75% {
+    transform: translateY(3px);
+  }
+}
+
+.text-wave {
+  display: inline-block;
+  animation: text-wave 4s ease-in-out infinite;
+}
+
+/* 언더라인 슬라이드 효과 */
+.text-underline-slide {
+  position: relative;
+  display: inline-block;
+}
+
+.text-underline-slide::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #06b6d4, #3b82f6);
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+
+.text-underline-slide:hover::after {
+  width: 100%;
+}
+
+/* =========================================
    반응형 유틸리티
    ========================================= */
 
@@ -318,11 +457,11 @@
   .glass-card {
     border-radius: 1rem;
   }
-  
+
   .section-container {
     padding: 3rem 0;
   }
-  
+
   .icon-container {
     width: 3rem;
     height: 3rem;

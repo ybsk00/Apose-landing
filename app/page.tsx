@@ -65,9 +65,9 @@ export default function Home() {
 
           {/* 메인 헤드라인 */}
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight break-keep">
-            <span className="text-white">원장님, 환자들이 병원을 찾는 방식이</span>
+            <span className="text-white text-glow-pulse">원장님, 환자들이 병원을 찾는 방식이</span>
             <br />
-            <span className="text-gradient">완전히 바뀌었습니다</span>
+            <span className="text-hero-animate">완전히 바뀌었습니다</span>
           </h1>
 
           {/* 과거 vs 현재 비교 */}

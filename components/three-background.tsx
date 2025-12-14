@@ -2,32 +2,18 @@
 
 import { useEffect, useRef, useState } from "react"
 
-interface Particle {
-    x: number
-    y: number
-    z: number
-    vx: number
-    vy: number
-    size: number
-    opacity: number
-    color: string
-}
-
 export function ThreeBackground() {
     const canvasRef = useRef<HTMLCanvasElement>(null)
-    const [isMobile, setIsMobile] = useState(false)
-    const animationRef = useRef<number>()
-    const particlesRef = useRef<Particle[]>([])
-    const mouseRef = useRef({ x: 0, y: 0 })
+    const animationRef = useRef<number | undefined>(undefined)
+    const timeRef = useRef(0)
+    const [isMobile, setIsMobile] = useState<boolean>(false)
 
     useEffect(() => {
-        // 모바일 감지
         const checkMobile = () => {
             setIsMobile(window.innerWidth < 768)
         }
         checkMobile()
         window.addEventListener("resize", checkMobile)
-
         return () => window.removeEventListener("resize", checkMobile)
     }, [])
 
@@ -38,7 +24,6 @@ export function ThreeBackground() {
         const ctx = canvas.getContext("2d")
         if (!ctx) return
 
-        // 캔버스 크기 설정
         const setCanvasSize = () => {
             canvas.width = window.innerWidth
             canvas.height = window.innerHeight
@@ -46,100 +31,98 @@ export function ThreeBackground() {
         setCanvasSize()
         window.addEventListener("resize", setCanvasSize)
 
-        // 파티클 생성 (모바일은 적게)
-        const particleCount = isMobile ? 30 : 80
-        const colors = [
-            "rgba(59, 130, 246, 0.6)",  // blue
-            "rgba(6, 182, 212, 0.5)",   // cyan
-            "rgba(139, 92, 246, 0.4)",  // purple
-            "rgba(255, 255, 255, 0.3)", // white
-        ]
+        const gridSize = isMobile ? 25 : 40
+        const waveAmplitude = isMobile ? 30 : 50
+        const waveSpeed = 0.02
 
-        particlesRef.current = Array.from({ length: particleCount }, () => ({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            z: Math.random() * 1000,
-            vx: (Math.random() - 0.5) * 0.3,
-            vy: (Math.random() - 0.5) * 0.3,
-            size: Math.random() * 3 + 1,
-            opacity: Math.random() * 0.5 + 0.2,
-            color: colors[Math.floor(Math.random() * colors.length)],
-        }))
-
-        // 마우스 이동 추적
-        const handleMouseMove = (e: MouseEvent) => {
-            mouseRef.current = {
-                x: (e.clientX / window.innerWidth) * 2 - 1,
-                y: (e.clientY / window.innerHeight) * 2 - 1,
-            }
-        }
-        window.addEventListener("mousemove", handleMouseMove)
-
-        // 애니메이션 루프
         const animate = () => {
             if (!ctx || !canvas) return
 
-            // 배경 그라디언트
-            const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height)
-            gradient.addColorStop(0, "#0a0f1a")
-            gradient.addColorStop(0.5, "#111827")
-            gradient.addColorStop(1, "#0a0f1a")
-            ctx.fillStyle = gradient
+            timeRef.current += waveSpeed
+
+            ctx.fillStyle = "#0a0f1a"
             ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-            // 마우스 영향 계산
-            const mouseInfluence = isMobile ? 0 : 30
-
-            // 파티클 업데이트 및 렌더링
-            particlesRef.current.forEach((particle) => {
-                // 마우스 반응
-                particle.x += particle.vx + mouseRef.current.x * mouseInfluence * 0.01
-                particle.y += particle.vy + mouseRef.current.y * mouseInfluence * 0.01
-
-                // 화면 경계 처리
-                if (particle.x < 0) particle.x = canvas.width
-                if (particle.x > canvas.width) particle.x = 0
-                if (particle.y < 0) particle.y = canvas.height
-                if (particle.y > canvas.height) particle.y = 0
-
-                // 깊이에 따른 크기 조절 (3D 효과)
-                const scale = (1000 - particle.z) / 1000
-                const size = particle.size * scale
-
-                // 파티클 그리기
-                ctx.beginPath()
-                ctx.arc(particle.x, particle.y, size, 0, Math.PI * 2)
-                ctx.fillStyle = particle.color
-                ctx.fill()
-
-                // 연결선 (가까운 파티클끼리)
-                if (!isMobile) {
-                    particlesRef.current.forEach((other) => {
-                        const dx = particle.x - other.x
-                        const dy = particle.y - other.y
-                        const distance = Math.sqrt(dx * dx + dy * dy)
-
-                        if (distance < 150) {
-                            ctx.beginPath()
-                            ctx.strokeStyle = `rgba(59, 130, 246, ${0.1 * (1 - distance / 150)})`
-                            ctx.lineWidth = 0.5
-                            ctx.moveTo(particle.x, particle.y)
-                            ctx.lineTo(other.x, other.y)
-                            ctx.stroke()
-                        }
-                    })
-                }
-            })
-
-            // 중앙 글로우 효과
+            const cols = Math.ceil(canvas.width / gridSize) + 1
+            const rows = Math.ceil(canvas.height / gridSize) + 1
+            const perspective = 300
             const centerX = canvas.width / 2
-            const centerY = canvas.height / 2
-            const glowGradient = ctx.createRadialGradient(
-                centerX, centerY, 0,
-                centerX, centerY, canvas.width * 0.5
-            )
-            glowGradient.addColorStop(0, "rgba(59, 130, 246, 0.05)")
-            glowGradient.addColorStop(0.5, "rgba(6, 182, 212, 0.02)")
+            const centerY = canvas.height * 0.6
+
+            const points: { x: number; y: number; z: number }[][] = []
+
+            for (let row = 0; row < rows; row++) {
+                points[row] = []
+                for (let col = 0; col < cols; col++) {
+                    const x = col * gridSize
+                    const y = row * gridSize
+
+                    const wave1 = Math.sin(x * 0.01 + timeRef.current * 2) * waveAmplitude
+                    const wave2 = Math.cos(y * 0.015 + timeRef.current * 1.5) * waveAmplitude * 0.7
+                    const wave3 = Math.sin((x + y) * 0.008 + timeRef.current) * waveAmplitude * 0.5
+                    const z = wave1 + wave2 + wave3
+
+                    const scale = perspective / (perspective + z * 0.5)
+                    const projX = centerX + (x - centerX) * scale
+                    const projY = centerY + (y - centerY) * scale * 0.5 + z * 0.8
+
+                    points[row][col] = { x: projX, y: projY, z }
+                }
+            }
+
+            ctx.lineWidth = 0.5
+
+            for (let row = 0; row < rows; row++) {
+                ctx.beginPath()
+                for (let col = 0; col < cols; col++) {
+                    const point = points[row][col]
+                    if (col === 0) {
+                        ctx.moveTo(point.x, point.y)
+                    } else {
+                        ctx.lineTo(point.x, point.y)
+                    }
+                }
+                const rowRatio = row / rows
+                const r = Math.floor(6 + rowRatio * 30)
+                const g = Math.floor(182 - rowRatio * 50)
+                const b = Math.floor(212 - rowRatio * 30)
+                ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, 0.3)`
+                ctx.stroke()
+            }
+
+            for (let col = 0; col < cols; col++) {
+                ctx.beginPath()
+                for (let row = 0; row < rows; row++) {
+                    const point = points[row][col]
+                    if (row === 0) {
+                        ctx.moveTo(point.x, point.y)
+                    } else {
+                        ctx.lineTo(point.x, point.y)
+                    }
+                }
+                const colRatio = col / cols
+                const r = Math.floor(6 + colRatio * 50)
+                const g = Math.floor(182 - colRatio * 30)
+                const b = 212
+                ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, 0.25)`
+                ctx.stroke()
+            }
+
+            const topGradient = ctx.createLinearGradient(0, 0, 0, canvas.height * 0.3)
+            topGradient.addColorStop(0, "#0a0f1a")
+            topGradient.addColorStop(1, "transparent")
+            ctx.fillStyle = topGradient
+            ctx.fillRect(0, 0, canvas.width, canvas.height * 0.3)
+
+            const bottomGradient = ctx.createLinearGradient(0, canvas.height * 0.7, 0, canvas.height)
+            bottomGradient.addColorStop(0, "transparent")
+            bottomGradient.addColorStop(1, "#0a0f1a")
+            ctx.fillStyle = bottomGradient
+            ctx.fillRect(0, canvas.height * 0.7, canvas.width, canvas.height * 0.3)
+
+            const glowGradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, canvas.width * 0.4)
+            glowGradient.addColorStop(0, "rgba(6, 182, 212, 0.08)")
+            glowGradient.addColorStop(0.5, "rgba(59, 130, 246, 0.04)")
             glowGradient.addColorStop(1, "transparent")
             ctx.fillStyle = glowGradient
             ctx.fillRect(0, 0, canvas.width, canvas.height)
@@ -151,7 +134,6 @@ export function ThreeBackground() {
 
         return () => {
             window.removeEventListener("resize", setCanvasSize)
-            window.removeEventListener("mousemove", handleMouseMove)
             if (animationRef.current) {
                 cancelAnimationFrame(animationRef.current)
             }
@@ -161,7 +143,6 @@ export function ThreeBackground() {
     return (
         <canvas
             ref={canvasRef}
-            className="three-canvas-container"
             style={{
                 position: "fixed",
                 top: 0,
