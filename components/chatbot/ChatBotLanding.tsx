@@ -120,7 +120,7 @@ function SpeedControl({
     onSpeedChange,
     onShowAll
 }: {
-    speed: 'normal' | 'slow'
+    speed: 'normal' | 'fast'
     onSpeedChange: () => void
     onShowAll: () => void
 }) {
@@ -128,13 +128,13 @@ function SpeedControl({
         <div className="fixed bottom-6 right-6 flex flex-col gap-2 z-50">
             <button
                 onClick={onSpeedChange}
-                className={`flex items-center gap-2 px-4 py-2 rounded-xl backdrop-blur-md border transition-all ${speed === 'slow'
+                className={`flex items-center gap-2 px-4 py-2 rounded-xl backdrop-blur-md border transition-all ${speed === 'fast'
                     ? 'bg-yellow-500/20 border-yellow-400/50 text-yellow-300'
                     : 'bg-white/10 border-white/20 text-white hover:bg-white/20'
                     }`}
             >
                 <Zap className="w-4 h-4" />
-                <span className="text-sm font-medium">{speed === 'slow' ? '빠르게' : '느리게'}</span>
+                <span className="text-sm font-medium">{speed === 'normal' ? '2배속 보기' : '일반 속도'}</span>
             </button>
             <button
                 onClick={onShowAll}
@@ -175,7 +175,7 @@ export function ChatBotLanding() {
     const [showTypingIndicator, setShowTypingIndicator] = useState(false)
     const [showCTA, setShowCTA] = useState(false)
     const [showForm, setShowForm] = useState(false)
-    const [speed, setSpeed] = useState<'normal' | 'slow'>('normal')
+    const [speed, setSpeed] = useState<'normal' | 'fast'>('normal')
     const [isScrollLocked, setIsScrollLocked] = useState(false)
     const [showNewMessageButton, setShowNewMessageButton] = useState(false)
 
@@ -229,7 +229,7 @@ export function ChatBotLanding() {
 
     // 속도 토글
     const handleSpeedChange = useCallback(() => {
-        setSpeed(prev => prev === 'normal' ? 'slow' : 'normal')
+        setSpeed(prev => prev === 'normal' ? 'fast' : 'normal')
     }, [])
 
     // 타이핑 애니메이션
