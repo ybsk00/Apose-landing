@@ -3,7 +3,8 @@
 import type React from "react"
 
 import { useState } from "react"
-import { createClient } from "@/lib/supabase"
+import { useMutation } from "convex/react"
+import { api } from "@/convex/_generated/api"
 import { sendMetaConversionEvent, getMetaBrowserId, getMetaClickId } from "@/lib/meta-conversion"
 import { CheckCircle2 } from "lucide-react"
 
@@ -24,6 +25,7 @@ export function ConsultationForm() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle")
+  const createConsultation = useMutation(api.consultations.create)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -37,22 +39,13 @@ export function ConsultationForm() {
     setSubmitStatus("idle")
 
     try {
-      const supabase = createClient()
-
-      const { error } = await supabase.from("consultations").insert([
-        {
-          privacy_consent: true,
-          company_name: formData.companyName,
-          contact_name: formData.contactName,
-          phone: formData.phone,
-          email: formData.email,
-        },
-      ])
-
-      if (error) {
-        console.error("[v0] Supabase insert error:", error)
-        throw error
-      }
+      await createConsultation({
+        privacy_consent: true,
+        company_name: formData.companyName,
+        contact_name: formData.contactName,
+        phone: formData.phone,
+        email: formData.email,
+      })
 
       console.log("[v0] Consultation submitted successfully")
 
@@ -82,8 +75,8 @@ export function ConsultationForm() {
           userAgent: navigator.userAgent,
           email: formData.email,
           phone: formData.phone,
-          fbp: getMetaBrowserId(),
-          fbc: getMetaClickId(),
+          fbp: getMetaBrowserId() ?? undefined,
+          fbc: getMetaClickId() ?? undefined,
         })
         console.log("[v0] Meta Conversions API Lead event sent")
       } catch (conversionError) {

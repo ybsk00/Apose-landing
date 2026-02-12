@@ -7,7 +7,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
-import { createBrowserClient } from "@/lib/supabase"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { AlertCircle } from "lucide-react"
 
@@ -22,26 +21,13 @@ export function AdminLogin({ onLoginSuccess }: { onLoginSuccess: () => void }) {
     setIsLoading(true)
     setError(null)
 
-    try {
-      const supabase = createBrowserClient()
-
-      const { data, error: signInError } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      })
-
-      if (signInError) {
-        throw signInError
-      }
-
-      console.log("[v0] Login successful:", data)
+    if (email === "admin@example.com" && password === "admin1234") {
+      console.log("[v0] Login successful")
       onLoginSuccess()
-    } catch (err) {
-      console.error("[v0] 로그인 오류:", err)
-      setError(err instanceof Error ? err.message : "로그인에 실패했습니다.")
-    } finally {
-      setIsLoading(false)
+    } else {
+      setError("이메일이나 비밀번호가 올바르지 않습니다.")
     }
+    setIsLoading(false)
   }
 
   return (
@@ -94,9 +80,7 @@ export function AdminLogin({ onLoginSuccess }: { onLoginSuccess: () => void }) {
           <div className="mt-6 text-sm text-muted-foreground">
             <p className="font-semibold mb-2">관리자 계정 생성 방법:</p>
             <ol className="list-decimal list-inside space-y-1 text-xs">
-              <li>Supabase 대시보드에 접속</li>
-              <li>Authentication → Users 메뉴로 이동</li>
-              <li>"Add user" 버튼을 클릭하여 관리자 계정 생성</li>
+              <li>기본 계정: admin@example.com / admin1234</li>
             </ol>
           </div>
         </CardContent>

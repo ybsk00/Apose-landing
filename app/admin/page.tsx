@@ -6,7 +6,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { RefreshCw, LogOut } from "lucide-react"
-import { createBrowserClient } from "@/lib/supabase"
+import { useQuery } from "convex/react"
+import { api } from "@/convex/_generated/api"
 import { AdminLogin } from "@/components/admin-login"
 
 interface Consultation {
@@ -16,72 +17,22 @@ interface Consultation {
   contact_name: string
   phone: string
   email: string
-  created_at: string
+  _creationTime: number
 }
 
 export default function AdminPage() {
-  const [consultations, setConsultations] = useState<Consultation[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const consultations = useQuery(api.consultations.get) || []
+  const isLoading = consultations === undefined
+
+  // TODO: Implement proper admin auth with Convex or keep as local state for now
   const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [isCheckingAuth, setIsCheckingAuth] = useState(true)
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      const supabase = createBrowserClient()
-      const {
-        data: { session },
-      } = await supabase.auth.getSession()
-
-      console.log("[v0] Auth check:", session)
-      setIsAuthenticated(!!session)
-      setIsCheckingAuth(false)
-    }
-
-    checkAuth()
-  }, [])
-
-  const fetchConsultations = async () => {
-    setIsLoading(true)
-    setError(null)
-
-    try {
-      const supabase = createBrowserClient()
-
-      const { data, error: supabaseError } = await supabase
-        .from("consultations")
-        .select("*")
-        .order("created_at", { ascending: false })
-
-      if (supabaseError) {
-        throw supabaseError
-      }
-
-      console.log("[v0] Fetched consultations:", data)
-      setConsultations(data || [])
-    } catch (err) {
-      console.error("[v0] 데이터 조회 오류:", err)
-      setError(err instanceof Error ? err.message : "데이터를 불러오는 중 오류가 발생했습니다.")
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      fetchConsultations()
-    }
-  }, [isAuthenticated])
-
-  const handleLogout = async () => {
-    const supabase = createBrowserClient()
-    await supabase.auth.signOut()
+  const handleLogout = () => {
     setIsAuthenticated(false)
-    setConsultations([])
   }
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString)
+  const formatDate = (timestamp: number) => {
+    const date = new Date(timestamp)
     return date.toLocaleString("ko-KR", {
       year: "numeric",
       month: "2-digit",
@@ -91,13 +42,7 @@ export default function AdminPage() {
     })
   }
 
-  if (isCheckingAuth) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-background to-muted/20 flex items-center justify-center">
-        <div className="text-muted-foreground">인증 상태 확인 중...</div>
-      </div>
-    )
-  }
+
 
   if (!isAuthenticated) {
     return <AdminLogin onLoginSuccess={() => setIsAuthenticated(true)} />
@@ -117,14 +62,11 @@ export default function AdminPage() {
                 <Button onClick={handleLogout} variant="outline" size="icon" title="로그아웃">
                   <LogOut className="w-4 h-4" />
                 </Button>
-                <Button onClick={fetchConsultations} disabled={isLoading} variant="outline" size="icon">
-                  <RefreshCw className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`} />
-                </Button>
               </div>
             </div>
           </CardHeader>
           <CardContent>
-            {error && <div className="bg-destructive/10 text-destructive p-4 rounded-lg mb-4">{error}</div>}
+
 
             {isLoading ? (
               <div className="text-center py-12 text-muted-foreground">데이터를 불러오는 중...</div>
@@ -161,7 +103,7 @@ export default function AdminPage() {
                             <Badge variant="destructive">미동의</Badge>
                           )}
                         </TableCell>
-                        <TableCell className="text-muted-foreground">{formatDate(consultation.created_at)}</TableCell>
+                        <TableCell className="text-muted-foreground">{formatDate(consultation._creationTime)}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>

@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import Script from "next/script"
 import "./globals.css"
+import ConvexClientProvider from "@/components/ConvexClientProvider"
 
 const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
@@ -63,7 +64,7 @@ export default function RootLayout({
         </noscript>
       </head>
       <body className={`font-sans antialiased`}>
-        {children}
+        <ConvexClientProvider>{children}</ConvexClientProvider>
         <Analytics />
       </body>
     </html>
