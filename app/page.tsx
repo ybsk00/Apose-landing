@@ -2,7 +2,7 @@
 
 import { useEffect } from "react"
 import { ThreeBackground } from "@/components/three-background"
-import { ChatBotLanding } from "@/components/chatbot/ChatBotLanding"
+import { HospitalChatbotLanding } from "@/components/hospital-chatbot/HospitalChatbotLanding"
 import { sendMetaConversionEvent, getMetaBrowserId, getMetaClickId } from "@/lib/meta-conversion"
 
 export default function Home() {
@@ -16,9 +16,8 @@ export default function Home() {
           fbp: getMetaBrowserId() ?? undefined,
           fbc: getMetaClickId() ?? undefined,
         })
-        console.log("[v0] Meta Conversions API ViewContent event sent")
       } catch (error) {
-        console.error("[v0] Meta Conversions API ViewContent error:", error)
+        console.error("[hospital-chatbot] Meta ViewContent error:", error)
       }
     }
 
@@ -27,11 +26,8 @@ export default function Home() {
 
   return (
     <main className="min-h-screen font-sans relative">
-      {/* 3D 배경 */}
       <ThreeBackground />
-
-      {/* AI 챗봇 랜딩페이지 */}
-      <ChatBotLanding />
+      <HospitalChatbotLanding />
     </main>
   )
 }
