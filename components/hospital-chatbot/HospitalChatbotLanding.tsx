@@ -51,7 +51,7 @@ function StickyTopBar() {
         onClick={scrollToForm}
         className="px-4 py-2 text-sm font-semibold rounded-lg bg-gradient-to-r from-teal-500 to-cyan-400 text-white hover:from-teal-400 hover:to-cyan-300 transition-all shadow-lg shadow-teal-500/20"
       >
-        무료 체험 신청
+        무료 상담 받기
       </button>
     </header>
   )
@@ -92,14 +92,9 @@ function HeroSection() {
           onClick={scrollToForm}
           className="inline-flex items-center gap-2 px-8 py-4 text-lg font-bold rounded-xl bg-gradient-to-r from-teal-500 to-cyan-400 text-white hover:from-teal-400 hover:to-cyan-300 transition-all shadow-xl shadow-teal-500/25 hover:shadow-teal-500/40 hover:-translate-y-0.5"
         >
-          30일 무료 체험 신청하기
+          무료 상담 받기
           <ArrowRight className="w-5 h-5" />
         </button>
-
-        {/* 신뢰 마이크로카피 */}
-        <p className="mt-4 text-sm text-gray-500">
-          설치비 0원 · 5분 세팅 · 30일 무료
-        </p>
       </div>
     </section>
   )
@@ -217,7 +212,7 @@ function SolutionSection() {
             onClick={scrollToForm}
             className="inline-flex items-center gap-2 px-8 py-4 text-lg font-bold rounded-xl bg-gradient-to-r from-teal-500 to-cyan-400 text-white hover:from-teal-400 hover:to-cyan-300 transition-all shadow-xl shadow-teal-500/25 hover:shadow-teal-500/40 hover:-translate-y-0.5"
           >
-            무료 데모 신청하기
+            도입 문의하기
             <ArrowRight className="w-5 h-5" />
           </button>
         </div>
@@ -342,7 +337,7 @@ function ProcessSection() {
     <section className="py-16 md:py-24 px-4">
       <div className="max-w-4xl mx-auto">
         <h2 className="text-3xl md:text-4xl font-bold text-white text-center mb-12" style={{ wordBreak: "keep-all" }}>
-          5분이면 세팅 완료
+          간편한 구축 프로세스
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {steps.map((s, i) => (
@@ -484,7 +479,7 @@ const faqs = [
   },
   {
     q: "비용은 얼마인가요?",
-    a: "30일 무료 체험 후, 월 이용료로 운영됩니다. 병원 규모와 기능에 따라 맞춤 견적을 제공합니다. 무료 체험을 신청하시면 상세 안내드립니다.",
+    a: "병원 규모와 기능에 따라 맞춤 견적을 제공합니다. 무료 상담을 신청하시면 상세 안내드립니다.",
   },
 ]
 
@@ -622,12 +617,12 @@ function CTAFormSection() {
         {/* 헤더 */}
         <div className="text-center mb-8">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-3" style={{ wordBreak: "keep-all" }}>
-            30일 무료 체험 신청
+            무료 상담 신청
           </h2>
           <p className="text-gray-400" style={{ wordBreak: "keep-all" }}>
-            설치비 0원, 5분 세팅, 30일 무료 체험.
+            병원에 맞는 AI 챗봇을 안내해 드립니다.
             <br />
-            지금 신청하시면 24시간 내 세팅을 도와드립니다.
+            상담 신청 후 24시간 내 담당자가 연락드립니다.
           </p>
         </div>
 
@@ -814,7 +809,7 @@ function FloatingCTA() {
         onClick={scrollToForm}
         className="w-full py-3.5 rounded-xl font-bold text-base text-white bg-gradient-to-r from-teal-500 to-cyan-400 shadow-lg shadow-teal-500/25"
       >
-        무료 신청
+        무료 상담 받기
       </button>
     </div>
   )
