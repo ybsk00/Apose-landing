@@ -2,7 +2,7 @@
 
 import { useEffect } from "react"
 import { ThreeBackground } from "@/components/three-background"
-import { HospitalChatbotLanding } from "@/components/hospital-chatbot/HospitalChatbotLanding"
+import { DualFunnelChatbot } from "@/components/chatbot/DualFunnelChatbot"
 import { sendMetaConversionEvent, getMetaBrowserId, getMetaClickId } from "@/lib/meta-conversion"
 
 export default function Home() {
@@ -17,7 +17,7 @@ export default function Home() {
           fbc: getMetaClickId() ?? undefined,
         })
       } catch (error) {
-        console.error("[hospital-chatbot] Meta ViewContent error:", error)
+        console.error("[dual-funnel] Meta ViewContent error:", error)
       }
     }
 
@@ -27,7 +27,7 @@ export default function Home() {
   return (
     <main className="min-h-screen font-sans relative">
       <ThreeBackground />
-      <HospitalChatbotLanding />
+      <DualFunnelChatbot />
     </main>
   )
 }
