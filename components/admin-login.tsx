@@ -11,7 +11,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { AlertCircle } from "lucide-react"
 
 export function AdminLogin({ onLoginSuccess }: { onLoginSuccess: () => void }) {
-  const [email, setEmail] = useState("")
+  const [userId, setUserId] = useState("")
   const [password, setPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -21,11 +21,11 @@ export function AdminLogin({ onLoginSuccess }: { onLoginSuccess: () => void }) {
     setIsLoading(true)
     setError(null)
 
-    if (email === "admin@example.com" && password === "admin1234") {
+    if (userId === "admin" && password === "admin2580") {
       console.log("[v0] Login successful")
       onLoginSuccess()
     } else {
-      setError("이메일이나 비밀번호가 올바르지 않습니다.")
+      setError("아이디 또는 비밀번호가 올바르지 않습니다.")
     }
     setIsLoading(false)
   }
@@ -47,13 +47,13 @@ export function AdminLogin({ onLoginSuccess }: { onLoginSuccess: () => void }) {
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="email">이메일</Label>
+              <Label htmlFor="userId">아이디</Label>
               <Input
-                id="email"
-                type="email"
-                placeholder="admin@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                id="userId"
+                type="text"
+                placeholder="아이디를 입력하세요"
+                value={userId}
+                onChange={(e) => setUserId(e.target.value)}
                 required
                 disabled={isLoading}
               />
@@ -77,11 +77,8 @@ export function AdminLogin({ onLoginSuccess }: { onLoginSuccess: () => void }) {
             </Button>
           </form>
 
-          <div className="mt-6 text-sm text-muted-foreground">
-            <p className="font-semibold mb-2">관리자 계정 생성 방법:</p>
-            <ol className="list-decimal list-inside space-y-1 text-xs">
-              <li>기본 계정: admin@example.com / admin1234</li>
-            </ol>
+          <div className="mt-6 text-xs text-muted-foreground text-center">
+            <p>관리자 전용 페이지입니다.</p>
           </div>
         </CardContent>
       </Card>
