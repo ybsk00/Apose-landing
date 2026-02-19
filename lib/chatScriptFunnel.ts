@@ -29,10 +29,6 @@ export const chatScript: ScriptMessage[] = [
         id: 2,
         speaker: 'expert',
         text: '안녕하세요, 병원 상담 문의량은 콘텐츠 방향, 상담 관리 시스템, 콘텐츠 차별화 등 다양한 문제로부터 시작될 수 있습니다.\n\n괜찮으시다면 제가 솔루션을 하나 제안 해드려도 될까요?',
-        choices: [
-            { label: '어떤 내용이야?', nextMessageId: 3 },
-            { label: '괜찮아, 됐어', nextMessageId: 3 },
-        ],
     },
 
     // --- 2중 퍼널 솔루션 설명 ---
