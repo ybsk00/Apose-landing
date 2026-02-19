@@ -10,9 +10,9 @@ const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "병원 전용 AI 챗봇 | 30일 무료 체험 - LumiBreeze",
+  title: "병원 마케팅 AI 2중 퍼널 솔루션 - A Pose Partners",
   description:
-    "할루시네이션 제로, 의료법 준수, 우리 병원 DB 기반 RAG 챗봇. 24시간 환자 응대, 예약 전환율 47% 향상.",
+    "AI 2중 퍼널 솔루션으로 병원 상담 문의량 증가, 예약 전환율 47% 향상. 24시간 자동 상담 시스템.",
   robots: "noindex, nofollow",
 }
 

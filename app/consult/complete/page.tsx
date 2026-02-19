@@ -51,7 +51,7 @@ export default function ConsultCompletePage() {
             <li>• 담당 매니저가 1~2일 내 연락드립니다</li>
             <li>• 병원 현황 및 요구사항을 파악합니다</li>
             <li>• 맞춤형 솔루션 데모를 제공합니다</li>
-            <li>• 12주 도입 로드맵을 함께 계획합니다</li>
+            <li>• 도입 로드맵을 함께 계획합니다</li>
           </ul>
         </div>
       </div>
